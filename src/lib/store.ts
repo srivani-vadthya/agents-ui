@@ -1,7 +1,13 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { AgentId } from "./agents";
 
 export type Role = "user" | "assistant";
+
+export interface User {
+  name: string;
+  email: string;
+}
 
 export interface UploadedFile {
   id: string;
@@ -32,8 +38,11 @@ export interface Thread {
 }
 
 interface State {
+  user: User | null;
   threads: Record<string, Thread>;
   order: string[]; // thread id order, newest first
+  setUser: (user: User) => void;
+  logout: () => void;
   createThread: (agentId: AgentId) => Thread;
   getThread: (id: string) => Thread | undefined;
   deleteThread: (id: string) => void;
@@ -48,9 +57,12 @@ const uid = () =>
   Math.random().toString(36).slice(2, 10) +
   Date.now().toString(36).slice(-4);
 
-export const useChatStore = create<State>((set, get) => ({
+export const useChatStore = create<State>()(persist((set, get) => ({
+  user: null,
   threads: {},
   order: [],
+  setUser: (user) => set({ user }),
+  logout: () => set({ user: null }),
   createThread: (agentId) => {
     const id = uid();
     const now = Date.now();
@@ -139,8 +151,9 @@ export const useChatStore = create<State>((set, get) => ({
         },
       };
     }),
-}));
-
+}),
+{ name: 'nexus-storage' }
+));
 export const newMessage = (
   role: Role,
   content = "",

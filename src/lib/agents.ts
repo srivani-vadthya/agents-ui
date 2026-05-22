@@ -30,7 +30,7 @@ export const AGENTS: Record<AgentId, AgentDef> = {
       "Ask questions against uploaded PDFs, docs and wikis. Returns cited, summarized answers with confidence scoring.",
     icon: BookOpenText,
     accentVar: "var(--agent-knowledge)",
-    accentHex: "#5DD4D0",
+    accentHex: "#7CE0E0",
     suggestions: [
       "Summarize the Q3 architecture review document",
       "What is our incident escalation policy?",
@@ -47,7 +47,7 @@ export const AGENTS: Record<AgentId, AgentDef> = {
       "Paste logs or upload a trace. The agent clusters errors, builds a dependency graph and ranks probable root causes.",
     icon: Activity,
     accentVar: "var(--agent-rca)",
-    accentHex: "#F4B860",
+    accentHex: "#D9D75A",
     suggestions: [
       "Analyze this 500 spike from auth-service",
       "Why is checkout latency rising since 14:00 UTC?",
@@ -64,7 +64,7 @@ export const AGENTS: Record<AgentId, AgentDef> = {
       "Generate full modules, endpoints, schemas and tests across React, Python, Java, Node, SQL and more.",
     icon: Code2,
     accentVar: "var(--agent-codegen)",
-    accentHex: "#7AE2B8",
+    accentHex: "#32D07A",
     suggestions: [
       "Build a REST API for inventory in FastAPI",
       "Generate a React table with sorting + pagination",
@@ -81,7 +81,7 @@ export const AGENTS: Record<AgentId, AgentDef> = {
       "Paste broken code. The agent diagnoses the issue, returns a unified diff, and explains the reasoning.",
     icon: Wrench,
     accentVar: "var(--agent-autofix)",
-    accentHex: "#E68DD4",
+    accentHex: "#8BB8FF",
     suggestions: [
       "Fix this race condition in my async handler",
       "Why does this React component re-render infinitely?",

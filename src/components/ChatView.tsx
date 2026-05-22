@@ -9,7 +9,7 @@ import {
   type Thread,
   type UploadedFile,
 } from "@/lib/store";
-import { streamAgent } from "@/lib/mockAgents";
+import { streamAgent } from "@/lib/agentClient";
 import { Composer, type ComposerSubmit } from "./Composer";
 import { MessageBubble } from "./MessageBubble";
 import { RightPanel } from "./RightPanel";
@@ -74,14 +74,17 @@ export function ChatView({ thread }: { thread: Thread }) {
     el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [thread.messages]);
 
-  const runAgent = async (prompt: string, files: UploadedFile[]) => {
+  const runAgent = async (prompt: string, files: File[]) => {
     const assistant = newMessage("assistant", "", { streaming: true });
     addMessage(thread.id, assistant);
     setBusy(true);
     stopRef.current = false;
 
     try {
-      const iter = streamAgent(agent.id, prompt);
+      const iter = streamAgent(agent.id, prompt, {
+        threadId: thread.id,
+        files,
+      });
       let result = await iter.next();
       while (!result.done) {
         if (stopRef.current) break;
@@ -124,7 +127,7 @@ export function ChatView({ thread }: { thread: Thread }) {
       setTitle(thread.id, text.slice(0, 48));
     }
 
-    await runAgent(text, uploaded);
+    await runAgent(text, files);
   };
 
   const handleSwitchAgent = (id: AgentId) => {
@@ -138,7 +141,7 @@ export function ChatView({ thread }: { thread: Thread }) {
   const handleRegenerate = async () => {
     const lastUser = [...thread.messages].reverse().find((m) => m.role === "user");
     if (!lastUser) return;
-    await runAgent(lastUser.content, lastUser.files ?? []);
+    await runAgent(lastUser.content, []);
   };
 
   return (
